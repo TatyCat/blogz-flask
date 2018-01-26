@@ -17,8 +17,9 @@ class User(db.Model):
     password = db.Column(db.String(25), nullable=False)
     blogpost = db.relationship("BlogPost", back_populates="user")
                                             # backref = 'user')
-    def __init__(self, username):
+    def __init__(self, username, password):
         self.username = username
+        self.password = password
 
 
 class BlogPost(db.Model):
@@ -67,16 +68,16 @@ def login():
 @app.route('/signup', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
 
-        existing_user = User.query.filter_by(email=email).first()
+        existing_user = User.query.filter_by(username=username).first()
         if not existing_user:
-            new_user = User(email, password)
+            new_user = User(username, password)
             db.session.add(new_user)
             db.session.commit()
-            session['email'] = email
+            session['username'] = username
             return redirect('/')
         else:
             return "<h1>Duplicate user</h1>"
