@@ -1,3 +1,14 @@
-{% extends "base.html" %} 
-{% block content %} 
+{% extends 'base.html' %} 
+
+{% include 'nav.html' %}
+
+{% block content %}
+    <h1 class='header'>{{ post.title }}</h1>
+    <p>{{ post.body|linebreaksbr }}</p>
+</div>
+    <p>Written by:</p> {{author}}
+    {{ post.published_date }}
+</div>
+{% endif %}
+
 {% endblock %}

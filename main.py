@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -9,35 +10,47 @@ db = SQLAlchemy(app)
 app.secret_key = 'y337kGcys&zP3B'
 
 
-class Task(db.Model):
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120))
-    completed = db.Column(db.Boolean)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __init__(self, name, owner):
-        self.name = name
-        self.completed = False
-        self.owner = owner
-
-
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
-    tasks = db.relationship('Task', backref='owner')
+    username = db.Column(db.String(25), unique=True, nullable=False)
+    password = db.Column(db.String(25), nullable=False)
+    blogpost = db.relationship("BlogPost", back_populates="username")
+                                            # backref = 'user')
+    def __init__(self, username):
+        self.username = author
 
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
 
-@app.before_request
-def require_login():
-    allowed_routes = ['login', 'register']
-    if request.endpoint not in allowed_routes and 'email' not in session:
-        return redirect('/login')
+class BlogPost(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False)
+    # text = db.Column(db.text, nullable=False)
+    date_published = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    user = db.relationship("User", back_populates="blogpost")
+    # blog_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __init__(self, text, title, date_published):
+        self.text = text
+        self.title = title
+        self.date_published = published
+
+@app.route('/', methods=['GET'])
+def index():
+
+    return render_template('index.html')
+
+
+# @app.route('/', methods=['GET'])
+# def index():
+#     return [user.username for user in User.query.all()]
+
+# @app.before_request
+# def require_login():
+#     allowed_routes = ['login', 'register']
+#     if request.endpoint not in allowed_routes and 'email' not in session:
+#         return redirect('/login')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -56,14 +69,12 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/signup', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         verify = request.form['verify']
-
-        # TODO - validate user's data
 
         existing_user = User.query.filter_by(email=email).first()
         if not existing_user:
@@ -73,45 +84,45 @@ def register():
             session['email'] = email
             return redirect('/')
         else:
-            # TODO - user better response messaging
             return "<h1>Duplicate user</h1>"
 
-    return render_template('register.html')
+    return render_template('signup.html')
 
 @app.route('/logout')
 def logout():
     del session['email']
     return redirect('/')
 
-
-@app.route('/', methods=['POST', 'GET'])
-def index():
-
-    owner = User.query.filter_by(email=session['email']).first()
-
-    if request.method == 'POST':
-        task_name = request.form['task']
-        new_task = Task(task_name, owner)
-        db.session.add(new_task)
-        db.session.commit()
-
-    tasks = Task.query.filter_by(completed=False,owner=owner).all()
-    completed_tasks = Task.query.filter_by(completed=True,owner=owner).all()
-    return render_template('todos.html',title="Get It Done!", 
-        tasks=tasks, completed_tasks=completed_tasks)
+@app.route('/newpost')
+def new_post():
+    title = request.form['title']
+    text = request.form['text']
+    author = request.form['author']
+    post = BlogPost(title=title, text=text, author=author, date_posted=date_posted.now())
+    return (url_for('index'))
 
 
-@app.route('/delete-task', methods=['POST'])
-def delete_task():
+@app.route('/blog/<int:post_id>')
+def detailpg(post_id):
+    post = BlogPost.query.filter_by(id=post_id).one()
+    # date_posted = / methods=['GET']
+    return render_template('postdetail.html', )
 
-    task_id = int(request.form['task-id'])
-    task = Task.query.get(task_id)
-    task.completed = True
-    db.session.add(task)
-    db.session.commit()
 
-    return redirect('/')
+@app.route('/blog/<int:user_id>')
+def singleUser(user_id):
+    return render_template('singleUser.html')
+
+@app.errorhandler(404) 
+def page_not_found(e):
+    return render_template('error.html'), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('error.html'), 500
+
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
