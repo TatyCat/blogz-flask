@@ -18,7 +18,7 @@ class User(db.Model):
     blogpost = db.relationship("BlogPost", back_populates="user")
                                             # backref = 'user')
     def __init__(self, username):
-        self.username = author
+        self.username = username
 
 
 class BlogPost(db.Model):
@@ -51,11 +51,11 @@ def index():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(email=email).first()
-        if user and user.password == password:
-            session['email'] = email
+        user = User.query.filter_by(username=username).first()
+        if username and user.password == password:
+            session['username'] = username
             flash("Logged in")
             return redirect('/')
         else:
