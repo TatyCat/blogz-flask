@@ -3,14 +3,17 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-    <nav> 
-        {% include 'nav.html' %}
-    </nav>
-    <header> 
+    <header>
         <h1>Welcome!</h1>
+        <h2>Current Bloggers:</h2>
     </header>
     <main class="points">
-        <p>also</p>
+        <ul>
+            {% for blogger in bloggers %}
+                <li>
+                    <a href="">{{blogger}}</a>
+                </li>    
+            {%  endfor %}
+        </ul>
     </main>
-    
 {% endblock %}

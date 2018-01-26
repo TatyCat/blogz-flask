@@ -15,7 +15,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(25), unique=True, nullable=False)
     password = db.Column(db.String(25), nullable=False)
-    blogpost = db.relationship("BlogPost", back_populates="username")
+    blogpost = db.relationship("BlogPost", back_populates="user")
                                             # backref = 'user')
     def __init__(self, username):
         self.username = author
@@ -25,7 +25,7 @@ class BlogPost(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
-    # text = db.Column(db.text, nullable=False)
+    body = db.Column(db.Text, nullable=False)
     date_published = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     user = db.relationship("User", back_populates="blogpost")
@@ -38,13 +38,8 @@ class BlogPost(db.Model):
 
 @app.route('/', methods=['GET'])
 def index():
-
-    return render_template('index.html')
-
-
-# @app.route('/', methods=['GET'])
-# def index():
-#     return [user.username for user in User.query.all()]
+    bloggers = BlogPost.query.all()
+    return render_template('index.html', bloggers=bloggers)
 
 # @app.before_request
 # def require_login():
