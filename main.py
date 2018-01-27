@@ -30,10 +30,9 @@ class BlogPost(db.Model):
     date_published = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
-    def __init__(self, title, body, date_published, author):
+    def __init__(self, title, body, author):
         self.title = title
         self.body = body
-        self.date_published = date_published
         self.author = author
 
 
@@ -124,7 +123,7 @@ def detailpg(post_id):
     return render_template('postdetail.html' )
 
 
-@app.route('allposts')
+@app.route('/allposts')
 def allposts():
     allposts = BlogPost.query.order_by(BlogPost.title).all()
     return render_template('allposts.html', allposts=allposts)
