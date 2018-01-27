@@ -1,13 +1,29 @@
 {% extends 'base.html' %} 
-{% include 'nav.html' %}
 
+{% block title %}New Post{% endblock %}
 
-{% block content %}
-<h1>New Post!</h1>
-<form action="/" method="">
-    <label>Title:</label>
-        <input id="" type="text" name="" />
-        <input id="" type="textbox" name="" />
-        <input type="submit">
+{% block body %}
+<h1>Unleash Your Words (New Post)!</h1>
+<form action="/newpost" method="POST">
+    <table>
+        <tr>
+            <td>
+                <label for="title">Title of Blog:</label>
+            </td>
+            <td>
+                <input name="title" type="text" value="{{ title }}">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="body">Blog Post Body:</label>
+            </td>
+            <td>
+                <input name="body" type="text" value="{{ body }}">
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="Post It To The World">
 </form>
+
 {% endblock %}

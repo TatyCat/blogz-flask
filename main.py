@@ -15,8 +15,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(25), unique=True, nullable=False)
     password = db.Column(db.String(25), nullable=False)
-    blogpost = db.relationship("BlogPost", back_populates="user")
-                                            # backref = 'user')
+    blogposts = db.relationship("BlogPost", backref="author")
+                                        
     def __init__(self, username, password):
         self.username = username
         self.password = password
@@ -27,15 +27,14 @@ class BlogPost(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     body = db.Column(db.Text, nullable=False)
-    date_published = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
-    user = db.relationship("User", back_populates="blogpost")
-    # blog_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __init__(self, text, title, date_published):
-        self.text = text
+    date_published = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    def __init__(self, title, body, date_published, author):
         self.title = title
-        self.date_published = published
+        self.body = body
+        self.date_published = date_published
+        self.author = author
 
 @app.route('/', methods=['GET'])
 def index():
@@ -86,23 +85,34 @@ def register():
 
 @app.route('/logout')
 def logout():
-    del session['email']
+    del session['username']
     return redirect('/')
 
-@app.route('/newpost')
+@app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
-    title = request.form['title']
-    text = request.form['text']
-    author = request.form['author']
-    post = BlogPost(title=title, text=text, author=author, date_posted=date_posted.now())
-    return (url_for('index'))
+    author = User.query.filter_by(username=session['username']).first()
+    
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        # author = request.args.get('user.id')
+        if title == "" or body == "":
+            flash("Please fill out the title and body of your post.", 'error')
+            return redirect('/newpost')
+        else:
+            post = BlogPost(title, body, author)
+            db.session.add(post)
+            db.session.commit()
+            return redirect('/')
+    return render_template('newpost.html')
 
 
 @app.route('/blog/<int:post_id>')
 def detailpg(post_id):
+    post_id = request.args.get('BlogPost.id')
     post = BlogPost.query.filter_by(id=post_id).one()
     # date_posted = / methods=['GET']
-    return render_template('postdetail.html', )
+    return render_template('postdetail.html' )
 
 
 @app.route('/blog/<int:user_id>')
