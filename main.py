@@ -14,7 +14,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(25), unique=True, nullable=False)
-    password = db.Column(db.String(25), nullable=False)
+    password = db.Column(db.String(30), nullable=False)
     blogposts = db.relationship("BlogPost", backref="author")
                                         
     def __init__(self, username, password):
@@ -36,16 +36,22 @@ class BlogPost(db.Model):
         self.date_published = date_published
         self.author = author
 
+
+
+@app.before_request
+def require_login():
+    allowed_routes = ['login', 'register', 'index', 'allposts']
+    if request.endpoint not in allowed_routes and 'username' not in session:
+        flash('Please log in to continue')
+        return redirect('/login')
+
+
 @app.route('/', methods=['GET'])
 def index():
-    bloggers = BlogPost.query.all()
+    # bloggers = User.query.order_by(User.username).all()
+    bloggers = User.query.order_by(User.username).all()
+    
     return render_template('index.html', bloggers=bloggers)
-
-# @app.before_request
-# def require_login():
-#     allowed_routes = ['login', 'register']
-#     if request.endpoint not in allowed_routes and 'email' not in session:
-#         return redirect('/login')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -57,9 +63,10 @@ def login():
         if username and user.password == password:
             session['username'] = username
             flash("Logged in")
-            return redirect('/')
+            return redirect('/newpost')
         else:
-            flash('User password incorrect, or user does not exist', 'error')
+            flash('User password incorrect or user does not exist', 'error')
+            return redirect('/login')
 
     return render_template('login.html')
 
@@ -83,10 +90,12 @@ def register():
 
     return render_template('signup.html')
 
+
 @app.route('/logout')
 def logout():
     del session['username']
     return redirect('/')
+
 
 @app.route('/newpost', methods=['GET', 'POST'])
 def new_post():
@@ -115,9 +124,16 @@ def detailpg(post_id):
     return render_template('postdetail.html' )
 
 
+@app.route('allposts')
+def allposts():
+    allposts = BlogPost.query.order_by(BlogPost.title).all()
+    return render_template('allposts.html', allposts=allposts)
+
+
 @app.route('/blog/<int:user_id>')
 def singleUser(user_id):
     return render_template('singleUser.html')
+
 
 @app.errorhandler(404) 
 def page_not_found(e):
