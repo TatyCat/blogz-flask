@@ -1,6 +1,6 @@
 {% extends "base.html" %} 
 
-
+{% block title %}All Posts{% endblock %}
 {% block body %}
 <header>
     <h1>Welcome!</h1>
@@ -10,10 +10,12 @@
     <ul>
         {% for post in allposts %}
             <li> 
-                <a href="/detailpg">{{post|title}} </a>
+                <a href="/detailpg">{{post.title}} </a>
             </li>
         {% endfor %}
     </ul>
-    {% endblock %}
 </main>
+{% endblock %}
 
+
+<!-- {{post|title}} -->
