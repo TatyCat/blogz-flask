@@ -1,14 +1,21 @@
 {% extends 'base.html' %} 
-{% include 'nav.html' %}
 
 {% block body %}
-<h1>
-    {{post.title}}
-    {{post.text}}
+<article> 
+    <h1> 
+        {{BlogPost.title|safe}}
+    </h1>
+    <p>
+        {{BlogPost.body|safe}}
+    </p>
     <hr>
-    {{post.author}}
-    {{post.}}
-</h1>    
+    <p>
+        {{User.username}}
+    </p>
+    
+    <p>
+        {{BlogPost.date_published}}
+    </p>
+    
+</article>
 {% endblock %}
-
-<!-- {{post.text|safe}} -->

@@ -112,16 +112,8 @@ def new_post():
             post = BlogPost(title, body, author)
             db.session.add(post)
             db.session.commit()
-            return redirect('/')
+            return redirect('/blog?id={0}'.format(post.id))
     return render_template('newpost.html')
-
-
-@app.route('/blog/<int:post_id>')
-def detailpg(post_id):
-    post_id = request.args.get('BlogPost.id')
-    post = BlogPost.query.filter_by(id=post_id).one()
-    # date_posted = / methods=['GET']
-    return render_template('postdetail.html' )
 
 
 @app.route('/allposts')
