@@ -1,19 +1,29 @@
 {% extends "base.html" %} 
 
-{% block title %}Home{% endblock %}
+{% block head %}
+<style class="selected">
+    
+</style>
+{% endblock %}
+
+{% block title %}
+    Home
+{% endblock %}
 
 {% block body %}
+<div class="space"> 
     <header>
-        <h1>Welcome!</h1>
+        <h1 class="header">Welcome!</h1>
         <h2>Current Bloggers:</h2>
     </header>
     <main class="points">
         <ul>
-            {% for blogger in bloggers %}
+            {% for author in bloggers %}
                 <li>
-                    <a href="">{{blogger.username}}</a>
+                    <a href="/blog?author={{author.id}}">{{author.username}}</a>
                 </li>    
             {%  endfor %}
         </ul>
     </main>
+</div>
 {% endblock %}

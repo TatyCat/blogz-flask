@@ -1,30 +1,32 @@
 {% extends 'base.html' %} 
 
-{% block title %}New Post{% endblock %}
+{% block title %}
+    New Post
+{% endblock %}
 
 {% block body %}
-<h1>Unleash Your Words (New Post)!</h1>
-<form action="/newpost" method="POST">
-    <table>
-        <tr>
-            <td>
-                <label for="title">Title of Blog:</label>
-            </td>
-            <td>
-                <input name="title" type="text" value="{{ title }}">
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label for="body">Blog Words:</label>
-            </td>
-            <td>
-                <textarea name="body" value="{{ body }}"></textarea>
-                <!-- <input name="body" type="t" value="{{ body }}"> -->
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Post It To The World">
-</form>
-
+<div class="space"> 
+    <h1 class="header">Unleash Your Words (New Post)!</h1>
+    <form action="/newpost" method="POST">
+        <table>
+            <tr>
+                <td>
+                    <label for="title">Title of Blog:</label>
+                </td>
+                <td>
+                    <input name="title" type="text" value="{{ title }}">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="body">Blog Words:</label>
+                </td>
+                <td>
+                    <textarea name="body" value="{{ body }}" rows="13" cols="18"></textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Post It To The World">
+    </form>
+</div>
 {% endblock %}

@@ -6,7 +6,7 @@ body,html {
 /* --------------- */
 
 /* Navigation Styling */
- .navigation ul{
+.navigation ul{
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -15,11 +15,11 @@ body,html {
     background-color: #333;  
  }
 
- .navigation li{
+.navigation li{
     float: left;
  }
 
- .navigation li a{
+.navigation li a{
     display: block;
     color: antiquewhite;
     font-family: sans-serif;
@@ -35,35 +35,85 @@ body,html {
     background-color: #111;
 }
  
- .navigation li a:hover:not(.active) {
+.navigation li a:hover:not(.active) {
     background-color: #111;
 } 
 
-.active {
-    background-color: #4CAF50;  
+.navigationlogsign{
+    border-left: .5px solid antiquewhite; 
 }
+
 /* --------------- */
 
+/* Random Body & Flash Messages  */
 h1{
     text-align: center;
     color: hotpink;
 }
 .points{
     color: rgb(117, 16, 211);
-}
-
-.flash{ 
-    background: #cee5F5; 
-    padding: 0.5em;
-    border: 1px solid #aacbe2; 
+    font-family: Georgia, serif;
 }
 
 .error{ 
     background: #f0d6d6; 
     padding: 0.5em; 
-    color: red;
+    color: rgb(240, 18, 63);
 }
 
 body{ 
     background-color: #f5f5f5;
 }
+/* --------------- */
+
+/* blog post styling */
+
+.blogtitle{
+    font-family: Arial, sans-serif;
+    padding-top: 1%;
+    padding-bottom: .5%;
+    margin: 0%;
+    font-size: 50px;
+    
+}
+
+.blogbody{
+    text-align: center;
+    color: rgb(11, 14, 27);
+    margin: 0%;
+    font-size: 25px;
+    padding-bottom: 1%;
+    padding-right: 2%;
+    padding-left: 2%; 
+}
+
+.author{
+    text-align: center;
+    font-size: 15px;
+
+}
+
+.date{
+    font-family: sans-serif;
+    text-align: center;
+    font-size: 10px;
+}
+
+hr{
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+/* --------------- */
+
+/* Header */
+.header{
+    font-size: 50px;
+}
+/* --------------- */
+
+/* Adding space to bullet articles */
+.space{
+    padding-left: 2%; 
+}
+/* --------------- */

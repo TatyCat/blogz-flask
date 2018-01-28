@@ -1,32 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Sign Up{% endblock %}
- {% block body %}
- 
-<h1>Register to Blogz!</h1>
-<form action="/signup" method="post">
-    <table>
-        <tr>
-            <td><label for="username">Username</label></td>
-            <td>
-                <input name="username" type="text" value="{{ username }}">
-            </td>
-        </tr>
+{% block title %}
+    Sign Up
+{% endblock %}
 
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td>
-                <input name="password" type="password">
-            </td>
-        </tr>
-        
-        <tr>
-            <td><label for="verify">Verify Password</label></td>
-            <td>
-                <input name="verify" type="password">
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Register">
-</form>
+{% block body %} 
+<div class="space">
+    <h1 class="header">Register to Blogz!</h1>
+    <form action="/signup" method="post">
+        <table>
+            <tr>
+                <td><label for="username">Username</label></td>
+                <td>
+                    <input name="username" type="text" value="{{ username }}">
+                </td>
+            </tr>
+
+            <tr>
+                <td><label for="password">Password</label></td>
+                <td>
+                    <input name="password" type="password">
+                </td>
+            </tr>
+            
+            <tr>
+                <td><label for="verify">Verify Password</label></td>
+                <td>
+                    <input name="verify" type="password">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Register">
+    </form>
+</div>
 {% endblock %}

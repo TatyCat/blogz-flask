@@ -13,8 +13,8 @@ app.secret_key = 'y337kGcys&zP3B'
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(25), unique=True, nullable=False)
-    password = db.Column(db.String(30), nullable=False)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    password = db.Column(db.String(20), nullable=False)
     blogposts = db.relationship("BlogPost", backref="author")
                                         
     def __init__(self, username, password):
@@ -39,16 +39,15 @@ class BlogPost(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'register', 'index', 'allposts']
+    allowed_routes = ['login', 'register', 'index', 'blog', 'static']
     if request.endpoint not in allowed_routes and 'username' not in session:
-        flash('Please log in to continue')
+        flash('Please log in to continue...')
         return redirect('/login')
 
 
 @app.route('/', methods=['GET'])
 @app.route('/home')
 def index():
-    # bloggers =  User.query.all()
     bloggers = User.query.order_by(User.username).all()
     
     return render_template('index.html', bloggers=bloggers)
@@ -60,12 +59,12 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if username and user.password == password:
+        if user and user.password == password:
             session['username'] = username
             flash("Logged in")
             return redirect('/newpost')
         else:
-            flash('User password incorrect or user does not exist', 'error')
+            flash('User password is incorrect or user does not exist', 'error')
             return redirect('/login')
 
     return render_template('login.html')
@@ -77,16 +76,33 @@ def register():
         username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
+        # validation
+        if username == "" or len(username) <= 3 or len(username) > 20:
+            flash('Please enter a valid username 4 to 20 characters long.')
+            return redirect('/signup')
+        elif password == "" or len(password) <= 3 or len(password) > 20:
+            flash('Please enter a password that is 4 to 20 characters long.')
+            return redirect('/signup')
+        elif verify == "":
+            flash('Please verify your password.')
+            return redirect('/signup')
+        elif verify != password:
+            flash('The passwords do not match, please retry.')
+            return redirect('/signup')
 
-        existing_user = User.query.filter_by(username=username).first()
-        if not existing_user:
-            new_user = User(username, password)
-            db.session.add(new_user)
-            db.session.commit()
-            session['username'] = username
-            return redirect('/')
         else:
-            return "<h1>Duplicate user</h1>"
+            existing_user = User.query.filter_by(username=username).first()
+
+       
+            if not existing_user:
+                new_user = User(username, password)
+                db.session.add(new_user)
+                db.session.commit()
+                session['username'] = username
+                return redirect('/')
+            else:
+                flash('You already have an account, please log in instead.')
+                
 
     return render_template('signup.html')
 
@@ -116,10 +132,17 @@ def new_post():
     return render_template('newpost.html')
 
 
-@app.route('/allposts')
-def allposts():
-    allposts = BlogPost.query.order_by(BlogPost.title).all()
-    return render_template('allposts.html', allposts=allposts)
+@app.route('/blog', methods=['GET', 'POST'])
+def blog():
+    post = BlogPost.query.order_by(-BlogPost.date_published).all()
+    post_id = request.args.get('id')
+    post_author = request.args.get('author')
+    if post_id:
+        post = BlogPost.query.get(post_id)
+        return render_template('postdetail.html', post=post)
+    if post_author:
+        post = BlogPost.query.filter_by(author_id=post_author).all()
+    return render_template('allposts.html', post=post)
 
 
 @app.route('/blog/<int:user_id>')

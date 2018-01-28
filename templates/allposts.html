@@ -1,21 +1,27 @@
 {% extends "base.html" %} 
 
-{% block title %}All Posts{% endblock %}
+{% block title %}
+    All Posts
+{% endblock %}
+
 {% block body %}
-<header>
-    <h1>Welcome!</h1>
-    <h2>Current Posts:</h2>
-</header>
-<main class="points"> 
-    <ul>
-        {% for post in allposts %}
-            <li> 
-                <a href="/blog?id={{post.id}}">{{post.title}} </a>
-            </li>
-        {% endfor %}
-    </ul>
-</main>
+<div class="space"> 
+    <header>
+        <h1 class="header">Welcome!</h1>
+        <h2>Current Posts:</h2>
+    </header>
+    <main class="allposts"> 
+        <ul>
+            {% for post in post %}
+                <li> 
+                    <a href="/blog?id={{post.id}}">{{post.title}} </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </main>
+</div>
 {% endblock %}
 
 
+<!-- <a href='/blog?id={{blogpost.id}}'></a> -->
 <!-- {{post|title}} -->

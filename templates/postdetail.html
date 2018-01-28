@@ -1,20 +1,26 @@
 {% extends 'base.html' %} 
 
+
+{% block title %}
+    {{post.title}}
+{% endblock %}
+
+
 {% block body %}
 <article> 
-    <h1> 
-        {{BlogPost.title|safe}}
+    <h1 class="blogtitle"> 
+        {{post.title}}
     </h1>
-    <p>
-        {{BlogPost.body|safe}}
+    <p class="blogbody">
+        {{post.body}}
     </p>
     <hr>
-    <p>
-        {{User.username}}
+    <p class="author">
+        Written by, <a href="/blog?author={{post.author.id}}">{{post.author.username}}</a>
     </p>
     
-    <p>
-        {{BlogPost.date_published}}
+    <p class="date">
+        {{post.date_published.strftime('%b %d, %Y')}}
     </p>
     
 </article>

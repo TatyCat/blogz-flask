@@ -1,25 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Log In{% endblock %}
+{% block title %}
+    Log In
+{% endblock %}
 
 {% block body %}
-<h1>Log in to Blogz!</h1>
-<p>If you don't have an account, you may <a href="/signup">SIGN UP</a> for one</p>
-<form action="/login" method="post">
-    <table>
-        <tr>
-            <td><label for="username">Username</label></td>
-            <td>
-                <input name="username" type="text" value="{{ username }}">
-            </td>
-        </tr>
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td>
-                <input name="password" type="password">
-            </td>
-        </tr>
-    </table>
-    <input type="submit" value="Login">
-</form>
+<div class="space">
+    <h1 class="header">Log in to Blogz!</h1>
+    <p>If you don't have an account, you may <a href="/signup">SIGN UP</a> for one</p>
+    <form action="/login" method="post">
+        <table>
+            <tr>
+                <td><label for="username">Username</label></td>
+                <td>
+                    <input name="username" type="text" value="{{ username }}">
+                </td>
+            </tr>
+            <tr>
+                <td><label for="password">Password</label></td>
+                <td>
+                    <input name="password" type="password">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Login">
+    </form>
+</div>
 {% endblock %}

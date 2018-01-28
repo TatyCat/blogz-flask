@@ -5,14 +5,27 @@
             <a href="/">Home</a>
         </li>
         <li>
-            <a href="/allposts">All Posts</a>
+            <a href="/blog">All Posts</a>
         </li>
         
         <li>
             <a href="/newpost">Add Post</a>
         </li>
-        <li style="float:right">
-            <a href="/logout">Log Out</a>
+        
+        {% if session['username'] %}
+            <li style="float:right">
+                <a href="/logout">Log Out</a>
+            </li>
+
+        {% else %}
+        <li style="float:right" class="navigationlogsign"> 
+            <a href="/login">Log In</a>
         </li>
+
+        <li style="float:right">
+            <a href="/signup">Sign Up</a>
+        </li>
+
+        {% endif %}
     </ul>
 </nav>
