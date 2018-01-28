@@ -51,11 +51,12 @@ h1{
     color: hotpink;
 }
 .allposts, a:link, a:visited{
-    color: rgb(117, 16, 211);
+    color: rgb(118, 23, 190);
     font-family: Georgia, serif;
 }
 #authorbullet{
-     color: rgb(155, 72, 233);
+     /* color: rgb(155, 72, 233); */
+      color: rgba(121, 11, 180, 0.774);
 }
 
 .allposts li{

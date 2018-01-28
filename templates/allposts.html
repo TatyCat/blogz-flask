@@ -14,8 +14,9 @@
         <ul>
             {% for post in post %}
                 <li> 
-                    <a href="/blog?id={{post.id}}">{{post.title}} </a> 
-                    by <a href="/blog?id={{post.author.id}}" id="authorbullet">{{post.author.username}}</a>
+                    <a href="/blog?id={{post.id}}">{{post.title}} </a>
+                    - by 
+                    <a href="/blog?author={{post.author.id}}" id="authorbullet">{{post.author.username}}</a>
                 </li>
             {% endfor %}
         </ul>

@@ -17,7 +17,7 @@
         <h2>Current Bloggers:</h2>
     </header>
     <main class="points">
-        <ul>
+        <ul class="allposts">
             {% for author in bloggers %}
                 <li>
                     <a href="/blog?author={{author.id}}">{{author.username}}</a>
